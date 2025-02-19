@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import GoBackButton from '../components/GoBackButton'
+import Button from '../components/Button'
 
 const Assignment3 = () => {
   const [inputText, setInputText] = useState('')
@@ -39,14 +41,9 @@ const Assignment3 = () => {
     width: '250px',
   }
 
-  const buttonStyle: React.CSSProperties = {
-    padding: '10px 20px',
-    fontSize: '16px',
-    backgroundColor: '#007BFF',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
+  const buttonContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    gap: '20px',
   }
 
   const resultStyle: React.CSSProperties = {
@@ -66,9 +63,11 @@ const Assignment3 = () => {
         placeholder='Enter a string'
         style={inputStyle}
       />
-      <button onClick={handleProcess} style={buttonStyle}>
-        Process
-      </button>
+      <div style={buttonContainerStyle}>
+        <Button onClick={handleProcess} color='secondary' text='결과 보기' />
+        <GoBackButton />
+      </div>
+
       {outputText && <div style={resultStyle}>결과: {outputText}</div>}
     </div>
   )

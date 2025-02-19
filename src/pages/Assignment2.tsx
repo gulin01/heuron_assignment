@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import GoBackButton from '../components/GoBackButton'
 
 const Assignment2 = () => {
   const [playerCount, setPlayerCount] = useState(0)
@@ -108,6 +109,7 @@ const Assignment2 = () => {
           ))}
         </div>
       )}
+      <GoBackButton />
     </div>
   )
 }

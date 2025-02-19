@@ -1,5 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useGrayscale } from '../context/GrayScaleContext'
+import GoBackButton from '../components/GoBackButton'
+import Button from '../components/Button'
+import Canvas from '../components/Canvas'
 
 const Assignment1 = () => {
   const [isDragging, setIsDragging] = useState(false)
@@ -8,23 +11,26 @@ const Assignment1 = () => {
   const [imageSrc, setImageSrc] = useState<string>('')
   const [scale, setScale] = useState(1)
   const [rotation, setRotation] = useState(0)
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const { grayscale, toggleGrayscale } = useGrayscale()
 
-  const fetchImage = async () => {
+  const fetchImage = useCallback(async () => {
     const randomPage = Math.floor(Math.random() * 100)
     setIsLoading(true)
-
-    const response = await fetch(
-      `https://picsum.photos/v2/list?page=${randomPage}&limit=1`
-    )
-    const data = await response.json()
-    if (data[0].download_url) {
+    try {
+      const response = await fetch(
+        `https://picsum.photos/v2/list?page=${randomPage}&limit=1`
+      )
+      const data = await response.json()
+      if (data[0]?.download_url) {
+        setImageSrc(data[0].download_url)
+      }
+    } catch (error) {
+      console.error('Error loading image:', error)
+    } finally {
       setIsLoading(false)
-      setImageSrc(data[0].download_url)
     }
-  }
+  }, [])
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.button === 0) {
@@ -41,12 +47,10 @@ const Assignment1 = () => {
     const diffY = e.clientY - startY
 
     if (e.button === 0) {
-      // Left click (zoom)
-      const newScale = Math.max(0.5, scale + diffY * 0.01) // Zoom in or out based on Y movement
+      const newScale = Math.max(0.5, scale + diffY * 0.01)
       setScale(newScale)
     } else if (e.button === 2) {
-      // Right click (rotate)
-      const newRotation = rotation + diffX * 0.1 // Rotate based on X movement
+      const newRotation = rotation + diffX * 0.1
       setRotation(newRotation)
     }
 
@@ -59,70 +63,34 @@ const Assignment1 = () => {
   }
 
   const handleRightClick = (e: React.MouseEvent) => {
-    e.preventDefault() // Prevent the default right-click menu
+    e.preventDefault()
 
-    const canvas = canvasRef.current
-    if (canvas) {
-      let startX = e.clientX
-      let startY = e.clientY
+    let startX = e.clientX
+    let startY = e.clientY
 
-      const onMouseMove = (moveEvent: MouseEvent) => {
-        const dx = moveEvent.clientX - startX
-        const dy = moveEvent.clientY - startY
-        setRotation(rotation + dx * 0.5)
-        startX = moveEvent.clientX
-        startY = moveEvent.clientY
-      }
-
-      const onMouseUp = () => {
-        document.removeEventListener('mousemove', onMouseMove)
-        document.removeEventListener('mouseup', onMouseUp)
-      }
-
-      document.addEventListener('mousemove', onMouseMove)
-      document.addEventListener('mouseup', onMouseUp)
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const dx = moveEvent.clientX - startX
+      const dy = moveEvent.clientY - startY
+      setRotation(rotation + dx * 0.5)
+      startX = moveEvent.clientX
+      startY = moveEvent.clientY
     }
+
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+    }
+
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseup', onMouseUp)
   }
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault()
-    const zoomDirection = e.deltaY > 0 ? -1 : 1 // Determine zoom direction
-    const newScale = Math.max(0.5, scale + zoomDirection * 0.05) // Update scale
+    const zoomDirection = e.deltaY > 0 ? -1 : 1
+    const newScale = Math.max(0.5, scale + zoomDirection * 0.05)
     setScale(newScale)
   }
-
-  useEffect(() => {
-    if (canvasRef.current && imageSrc) {
-      const canvas = canvasRef.current
-      const ctx = canvas.getContext('2d')
-      const img = new Image()
-      img.src = imageSrc
-
-      img.onload = () => {
-        canvas.width = img.width
-        canvas.height = img.height
-
-        ctx?.clearRect(0, 0, canvas.width, canvas.height) // Clear previous image
-        ctx?.save()
-
-        ctx?.translate(canvas.width / 2, canvas.height / 2)
-        ctx?.rotate((rotation * Math.PI) / 180) // Convert degrees to radians
-        ctx?.translate(-canvas.width / 2, -canvas.height / 2)
-
-        if (ctx) {
-          ctx.filter = grayscale ? 'grayscale(100%)' : 'none' // Use context from GrayscaleProvider
-        }
-
-        ctx?.scale(scale, scale)
-        ctx?.drawImage(img, 0, 0)
-        ctx?.restore()
-      }
-      img.onerror = () => {
-        setIsLoading(false) // Stop loading if image fails to load
-        alert('Failed to load image. Please try again.')
-      }
-    }
-  }, [imageSrc, grayscale, scale, rotation, isLoading])
 
   return (
     <div
@@ -136,49 +104,14 @@ const Assignment1 = () => {
         marginTop: '20px',
       }}
     >
-      <div
-        style={{
-          display: 'flex',
-          gap: '15px',
-          marginTop: '20px',
-        }}
-      >
-        <button
-          style={{
-            height: '40px',
-            padding: '0 20px',
-            backgroundColor: '#007bff',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            fontSize: '16px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          }}
-          onClick={fetchImage}
-        >
-          Load Image
-        </button>
-        <button
-          style={{
-            height: '40px',
-            padding: '0 20px',
-            backgroundColor: '#28a745',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            fontSize: '16px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          }}
+      <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
+        <Button onClick={fetchImage} color='primary' text='Load Image' />
+        <Button
           onClick={toggleGrayscale}
-        >
-          Toggle Grayscale
-        </button>
+          color='secondary'
+          text='Toggle Grayscale'
+        />
+        <GoBackButton />
       </div>
 
       {isLoading ? (
@@ -199,20 +132,20 @@ const Assignment1 = () => {
           style={{
             width: '500px',
             height: '500px',
+            border: '1px solid #dddddd',
           }}
         >
-          <canvas
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-            ref={canvasRef}
+          <Canvas
+            imageSrc={imageSrc}
+            scale={scale}
+            rotation={rotation}
+            grayscale={grayscale}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            onContextMenu={handleRightClick}
+            onRightClick={handleRightClick}
             onWheel={handleWheel}
-          ></canvas>
+          />
         </div>
       )}
     </div>
