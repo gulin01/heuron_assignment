@@ -1,0 +1,40 @@
+/* Nav.css */
+.nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  background-color: #f0f8ff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #ffeb3b;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.nav-link:hover {
+  background-color: #fdd835;
+  transform: scale(1.1);
+}
+
+.sticker {
+  font-size: 24px;
+  margin-right: 8px;
+
+  transition: transform 0.3s;
+}
+
+.nav-link:hover .sticker {
+  transform: rotate(10deg);
+}
