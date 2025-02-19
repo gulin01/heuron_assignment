@@ -1,46 +1,59 @@
-# Getting Started with Create React App
+# 휴런 과제 (Heuron Assignment)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📌 프로젝트 소개
 
-## Available Scripts
+이 프로젝트는 3개의 과제로 구성되어 있으며, 첫 페이지에서 각각의 과제로 이동할 수 있습니다.  
+각 과제의 코드는 **`src/pages`** 폴더에 위치해 있습니다.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🚀 프로젝트 실행 방법
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 1️⃣ 프로젝트 클론하기
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+아래 명령어를 실행하여 프로젝트를 클론합니다:
 
-### `npm test`
+```sh
+git clone https://github.com/gulin01/heuron_assignment.git
+cd heuron_assignment
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+2️⃣ 패키지 설치
+프로젝트의 모든 의존성을 설치합니다:
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3️⃣ 프로젝트 실행
+개발 서버를 시작하려면 다음 명령어를 입력하세요:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+npm start
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4️⃣ 프로젝트 확인
+터미널에 표시된 로컬 서버 주소 (http://localhost:3000)로 이동하면 프로젝트를 확인할 수 있습니다.
+첫 페이지에서 각 과제로 이동할 수 있습니다.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+📂 프로젝트 구조
+heuron_assignment/
+│── src/
+│   ├── pages/       # 과제별 코드가 위치한 폴더
+│   │   ├── Assignment1.tsx
+│   │   ├── Assignment2.tsx
+│   │   ├── Assignment3.tsx
+│   │   ├── Home.tsx
+│   │   ├── NotFound.tsx
+│   ├── App.tsx      # 메인 페이지 (과제 이동 가능)
+│   ├── index.tsx    # 프로젝트 엔트리 포인트
+│── public/
+│── package.json
+│── README.md
+📌 src/pages 폴더에서 각 과제의 코드를 확인하고 수정할 수 있습니다.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+💡 추가 정보
+npm install을 실행하면 필요한 패키지가 자동으로 설치됩니다.
+npm start를 사용하면 개발 서버가 실행됩니다.
+브라우저에서 프로젝트를 테스트하고 과제를 실행할 수 있습니다.
+⚡ 궁금한 사항이 있다면 언제든지 문의하세요! 😊
+```
